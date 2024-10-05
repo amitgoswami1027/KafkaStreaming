@@ -65,7 +65,29 @@ One of the key innovations over the past decade in computing has been the emerge
 * Kafka provides ordering guarantees for data stored within it, meaning that the order in which data is received is the order in which data will be produced to consumers
 * Commonly used data store for popular streaming tools like Apache Spark, Flink, and Samza
 
+## Kafka Architecture
+* Kafka servers are referred to as brokers
+* All of the brokers that work together are referred to as a cluster
+* Clusters may consist of just one broker, or thousands of brokers
+* Apache Zookeeper(opens in a new tab) is used by Kafka brokers to determine which broker is the leader of a given partition and topic
+* Zookeeper keeps track of which brokers are part of the Kafka cluster
+* Zookeeper stores configuration for topics and permissions (Access Control Lists - ACLs)
+* ACLs are Permissions associated with an object. In Kafka, this typically refers to a user’s permissions with respect to production and consumption, and/or the topics themselves.
+* Kafka nodes may gracefully join and leave the cluster
+* Kafka runs on the Java Virtual Machine (JVM)
 
+### Kafka Clustering - Key Points
+* Kafka servers are referred to as brokers and organized into clusters.
+* Kafka uses Apache Zookeeper to keep track of topic and ACL configuration, as well as determine leadership and cluster management.
+* Usage of ZooKeeper means that Kafka brokers can typically seamlessly join and leave clusters, allowing Kafka to grow easily as its usage increases or decreases.
+
+![image](https://github.com/user-attachments/assets/95420481-f692-40a4-9be3-e014406b79fb)
+
+### Kafka Data Partitioning
+![image](https://github.com/user-attachments/assets/486c2af5-7040-4296-846e-f3754ed4dbe2)
+
+#### Message Ordering
+Message ordering is only guaranteed within a partition in Kafka. If your topic has more than one partition, Kafka provides no guarantees that the messages will be consumed in the order they were produced. For many applications, this is an acceptable tradeoff for increasing the parallelism and speed of consumption. Your producer applications may still add metadata to the event header or message body itself to indicate ordering. However, this logic would belong to your application, and not Kafka itself. For example, you may place an increasing ID sequence in every message (eg 1, 2, 3, and so on) or a granular timestamp to indicate the order of a message.
 
 
 
